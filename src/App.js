@@ -11,11 +11,6 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import './App.css';
 
-//You must add your own API key here from Clarifai.
-const app = new Clarifai.App({
- apiKey: 'YOUR API KEY HERE'
-});
-
 // No Longer need this. Updated to particles-bg
 // const particlesOptions = {
 //   particles: {
@@ -29,10 +24,7 @@ const app = new Clarifai.App({
 //   }
 // }
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
+const initialState = {
       input: '',
       imageUrl: '',
       box: {},
@@ -45,9 +37,14 @@ class App extends Component {
         entries: 0,
         joined: ''
       }
-    }
-  }
+}
 
+class App extends Component {
+  constructor() {
+    super();
+      this.state = initialState;
+  }
+  
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
@@ -79,50 +76,56 @@ class App extends Component {
     this.setState({input: event.target.value});
   }
 
-  onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input});
-   
-    // HEADS UP! Sometimes the Clarifai Models can be down or not working as they are constantly getting updated.
-    // A good way to check if the model you are using is up, is to check them on the clarifai website. For example,
-    // for the Face Detect Mode: https://www.clarifai.com/models/face-detection
-    // If that isn't working, then that means you will have to wait until their servers are back up. 
+    onButtonSubmit = () => {
+        this.setState({imageUrl: this.state.input});
+        
+        // HEADS UP! Sometimes the Clarifai Models can be down or not working as they are constantly getting updated.
+        // A good way to check if the model you are using is up, is to check them on the clarifai website. For example,
+        // for the Face Detect Mode: https://www.clarifai.com/models/face-detection
+        // If that isn't working, then that means you will have to wait until their servers are back up. 
 
-    app.models.predict('face-detection', this.state.input)
-      .then(response => {
-        console.log('hi', response)
-        if (response) {
-          fetch('http://localhost:3000/image', {
-            method: 'put',
+        fetch('http://localhost:3000/imageurl', {
+            method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-              id: this.state.user.id
+                input: this.state.input
             })
-          })
+        })
             .then(response => response.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
+            .then(response => {
+                if (response) {
+                    fetch('http://localhost:3000/image', {
+                        method: 'put',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            id: this.state.user.id
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(count => {
+                            this.setState(Object.assign(this.state.user, { entries: count}))
+                        })
+                        .catch(console.log)
+                }
+                this.displayFaceBox(this.calculateFaceLocation(response))
             })
-
-        }
-        this.displayFaceBox(this.calculateFaceLocation(response))
-      })
-      .catch(err => console.log(err));
-  }
-
-  onRouteChange = (route) => {
-    if (route === 'signout') {
-      this.setState({isSignedIn: false})
-    } else if (route === 'home') {
-      this.setState({isSignedIn: true})
+            .catch(err => console.log(err));
     }
-    this.setState({route: route});
-  }
+
+    onRouteChange = (route) => {
+        if (route === 'signout') {
+            this.setState(initialState)
+        } else if (route === 'home') {
+            this.setState({isSignedIn: true})
+        }
+        this.setState({route: route});
+    }
 
   render() {
     const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
-        <ParticlesBg type="fountain" bg={true} />
+        <ParticlesBg type="cobweb" bg={true} />
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         { route === 'home'
           ? <div>
