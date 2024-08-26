@@ -61,50 +61,50 @@ class App extends Component {
     this.setState({input: event.target.value});
   }
 
-    onButtonSubmit = () => {
-        this.setState({imageUrl: this.state.input});
-        
-        // HEADS UP! Sometimes the Clarifai Models can be down or not working as they are constantly getting updated.
-        // A good way to check if the model you are using is up, is to check them on the clarifai website. For example,
-        // for the Face Detect Mode: https://www.clarifai.com/models/face-detection
-        // If that isn't working, then that means you will have to wait until their servers are back up. 
+  onButtonSubmit = () => {
+    this.setState({imageUrl: this.state.input});
+    
+    // HEADS UP! Sometimes the Clarifai Models can be down or not working as they are constantly getting updated.
+    // A good way to check if the model you are using is up, is to check them on the clarifai website. For example,
+    // for the Face Detect Mode: https://www.clarifai.com/models/face-detection
+    // If that isn't working, then that means you will have to wait until their servers are back up. 
 
-        fetch('https://face-recognition-brain-api-bmhn.onrender.com/imageurl', {
-            method: 'post',
+    fetch('https://face-recognition-brain-api-bmhn.onrender.com/imageurl', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        input: this.state.input
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        if (response) {
+          fetch('https://face-recognition-brain-api-bmhn.onrender.com/image', {
+            method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                input: this.state.input
+              id: this.state.user.id
             })
-        })
+          })
             .then(response => response.json())
-            .then(response => {
-                if (response) {
-                    fetch('https://face-recognition-brain-api-bmhn.onrender.com/image', {
-                        method: 'put',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            id: this.state.user.id
-                        })
-                    })
-                        .then(response => response.json())
-                        .then(count => {
-                            this.setState(Object.assign(this.state.user, { entries: count}))
-                        })
-                        .catch(console.log)
-                }
-                this.displayFaceBox(this.calculateFaceLocation(response))
+            .then(count => {
+              this.setState(Object.assign(this.state.user, { entries: count}))
             })
-            .catch(err => console.log(err));
-    }
-
-    onRouteChange = (route) => {
-        if (route === 'signout') {
-            this.setState(initialState)
-        } else if (route === 'home') {
-            this.setState({isSignedIn: true})
+            .catch(console.log)
         }
-        this.setState({route: route});
+        this.displayFaceBox(this.calculateFaceLocation(response))
+      })
+      .catch(err => console.log(err));
+  }
+
+  onRouteChange = (route) => {
+    if (route === 'signout') {
+      this.setState(initialState)
+    } else if (route === 'home') {
+      this.setState({isSignedIn: true})
     }
+    this.setState({route: route});
+  }
 
   render() {
     const { isSignedIn, imageUrl, route, box } = this.state;
