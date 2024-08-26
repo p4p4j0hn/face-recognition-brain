@@ -63,7 +63,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState(
-      {imageUrl: this.state.input}
+      {imageUrl: this.state.input},
       {box: {}}
     );
     
