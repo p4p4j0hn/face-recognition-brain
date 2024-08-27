@@ -62,10 +62,10 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
-    this.setState(
-      {imageUrl: this.state.input},
-      {box: {}}
-    );
+    this.setState({imageUrl: this.state.input});
+    // Reset the box so the old one doesn't display on the new image before
+    // clarifai returns the bounding_box
+    this.setState({box: {}});   
     
     // HEADS UP! Sometimes the Clarifai Models can be down or not working as they are constantly getting updated.
     // A good way to check if the model you are using is up, is to check them on the clarifai website. For example,
@@ -94,8 +94,8 @@ class App extends Component {
               this.setState(Object.assign(this.state.user, { entries: count}))
             })
             .catch(console.log)
-        }
-        this.displayFaceBox(this.calculateFaceLocation(response))
+        };
+        this.displayFaceBox(this.calculateFaceLocation(response));
       })
       .catch(err => console.log(err));
   }
