@@ -1,5 +1,7 @@
 import React from "react";
 
+const backendApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +25,7 @@ class Register extends React.Component {
   };
 
   onSubmitSignIn = () => {
-    fetch("http://localhost:3001/register", {
+    fetch(`${backendApiUrl}/register`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -38,7 +40,8 @@ class Register extends React.Component {
           this.props.loadUser(user);
           this.props.onRouteChange("home");
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   render() {

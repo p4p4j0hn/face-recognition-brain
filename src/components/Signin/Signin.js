@@ -1,6 +1,8 @@
 import React from "react";
 import "./Signin.css";
 
+const backendApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+
 class Signin extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +21,7 @@ class Signin extends React.Component {
   };
 
   onSubmitSignIn = () => {
-    fetch("http://localhost:3001/signin", {
+    fetch(`${backendApiUrl}/signin`, {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -33,7 +35,8 @@ class Signin extends React.Component {
           this.props.loadUser(user);
           this.props.onRouteChange("home");
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   render() {
