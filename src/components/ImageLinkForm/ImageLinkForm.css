@@ -4,19 +4,19 @@
     radial-gradient(
         circle farthest-side at 0% 50%,
         #553500 23.5%,
-        rgba(117, 138, 168, 0) 0
+        rgba(128, 88, 21, 0) 0
       )
       21px 30px,
     radial-gradient(
         circle farthest-side at 0% 50%,
         #758aa8 24%,
-        rgba(117, 138, 168, 0) 0
+        rgba(128, 88, 21, 0) 0
       )
       19px 30px,
     linear-gradient(
         #553500 14%,
-        rgba(117, 138, 168, 0) 0,
-        rgba(117, 138, 168, 0) 85%,
+        rgba(128, 88, 21, 0) 0,
+        rgba(128, 88, 21, 0) 85%,
         #553500 0
       )
       0 0,
@@ -25,8 +25,8 @@
         #553500 24%,
         #758aa8 0,
         #758aa8 26%,
-        rgba(117, 138, 168, 0) 0,
-        rgba(117, 138, 168, 0) 74%,
+        rgba(128, 88, 21, 0) 0,
+        rgba(128, 88, 21, 0) 74%,
         #758aa8 0,
         #758aa8 76%,
         #553500 0
@@ -37,8 +37,8 @@
         #553500 24%,
         #758aa8 0,
         #758aa8 26%,
-        rgba(117, 138, 168, 0) 0,
-        rgba(117, 138, 168, 0) 74%,
+        rgba(128, 88, 21, 0) 0,
+        rgba(128, 88, 21, 0) 74%,
         #758aa8 0,
         #758aa8 76%,
         #553500 0
@@ -50,7 +50,14 @@
 }
 
 .image-submit-button {
-  background: #857db1;
+  background-color: #758aa8;
   color: #ffdfaa;
 }
 
+input {
+  color: #051a38;
+}
+
+.light-background {
+  background-color: #ffdfaa;
+}

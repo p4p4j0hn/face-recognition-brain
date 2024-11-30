@@ -1,0 +1,9 @@
+.hover-input::hover {
+  background: #0f083b;
+}
+
+input,
+.light-color {
+  color: #ffdfaa;
+  border-color: #ffdfaa;
+}
