@@ -1,7 +1,7 @@
 .form {
   width: 700px;
-  background:
-    radial-gradient(
+  background-color: rgba(5, 26, 56, 0.5);
+  /*  radial-gradient(
         circle farthest-side at 0% 50%,
         #553500 23.5%,
         rgba(128, 88, 21, 0) 0
@@ -45,19 +45,20 @@
       )
       0 0,
     linear-gradient(90deg, #758aa8 2%, #553500 0, #553500 98%, #758aa8 0%) 0 0
-      #553500;
+      #553500; */
   background-size: 40px 60px;
 }
 
-.image-submit-button {
-  background-color: #758aa8;
-  color: #ffdfaa;
+.dark-color {
+  color: #051a38;
 }
 
-input {
+.image-submit-button {
+  background-color: #d4ad6a;
   color: #051a38;
 }
 
 .light-background {
   background-color: #ffdfaa;
+  color: #051a38;
 }

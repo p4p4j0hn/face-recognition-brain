@@ -15,3 +15,16 @@
   left: 0;
   z-index: -1;
 }
+
+.light-color {
+  color: #ffdfaa;
+  border-color: #ffdfaa;
+}
+
+.hover-light-color:hover {
+  background-color: #0f083b;
+}
+
+.hover-light-color:focus {
+  background-color: #0f083b;
+}

@@ -1,8 +1,0 @@
-input,
-.light-color {
-  color: #ffdfaa;
-}
-
-.hover-input::hover {
-  background-color: #0f083b;
-}
