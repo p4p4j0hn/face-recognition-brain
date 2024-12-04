@@ -14,7 +14,7 @@ const backendApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 const initialState = {
   input: "",
   imageUrl: "",
-  box: [],
+  boxes: [],
   route: "signin",
   isSignedIn: false,
   user: {
@@ -46,12 +46,11 @@ class App extends Component {
     });
   };
 
-  calculateFaceLocation = (data) => {
+  calculateFaceLocations = (data) => {
     const image = document.getElementById("inputimage");
     const width = Number(image.width);
     const height = Number(image.height);
-    const dataArray = data.outputs[0].data.regions;
-    const clarifaiFaces = dataArray.map((face) => {
+    return data.outputs[0].data.regions.map((face) => {
       const clarifaiFace = face.region_info.bounding_box;
       return {
         leftCol: clarifaiFace.left_col * width,
@@ -60,11 +59,10 @@ class App extends Component {
         bottomRow: height - clarifaiFace.bottom_row * height,
       };
     });
-    return clarifaiFaces;
   };
 
-  displayFaceBox = (box) => {
-    this.setState({ box: box });
+  displayFaceBoxes = (boxes) => {
+    this.setState({ boxes: boxes });
   };
 
   onInputChange = (event) => {
@@ -75,7 +73,7 @@ class App extends Component {
     this.setState({ imageUrl: this.state.input });
     // Reset the box so the old one doesn't display on the new image before
     // clarifai returns the bounding_box
-    this.setState({ box: [] });
+    this.setState({ boxes: [] });
 
     // HEADS UP! Sometimes the Clarifai Models can be down or not working as they are constantly getting updated.
     // A good way to check if the model you are using is up, is to check them on the clarifai website. For example,
@@ -105,7 +103,7 @@ class App extends Component {
             })
             .catch(console.log);
         }
-        this.displayFaceBox(this.calculateFaceLocation(response));
+        this.displayFaceBoxes(this.calculateFaceLocations(response));
       })
       .catch((err) => console.log(err));
   };
@@ -120,7 +118,7 @@ class App extends Component {
   };
 
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, route, boxes } = this.state;
     return (
       <div className="App">
         <ParticlesBg type="cobweb" bg={true} />
@@ -139,7 +137,7 @@ class App extends Component {
               onInputChange={this.onInputChange}
               onButtonSubmit={this.onButtonSubmit}
             />
-            <FaceRecognition box={box} imageUrl={imageUrl} />
+            <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
           </div>
         ) : route === "register" ? (
           <Register
