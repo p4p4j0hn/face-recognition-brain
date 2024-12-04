@@ -14,7 +14,7 @@ const backendApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 const initialState = {
   input: "",
   imageUrl: "",
-  box: {},
+  box: [],
   route: "signin",
   isSignedIn: false,
   user: {
@@ -25,6 +25,8 @@ const initialState = {
     joined: "",
   },
 };
+
+var faces;
 
 class App extends Component {
   constructor() {
@@ -45,17 +47,20 @@ class App extends Component {
   };
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("inputimage");
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height,
-    };
+    const dataArray = data.outputs[0].data.regions;
+    const clarifaiFaces = dataArray.map((face) => {
+      const clarifaiFace = face.region_info.bounding_box;
+      return {
+        leftCol: clarifaiFace.left_col * width,
+        topRow: clarifaiFace.top_row * height,
+        rightCol: width - clarifaiFace.right_col * width,
+        bottomRow: height - clarifaiFace.bottom_row * height,
+      };
+    });
+    return clarifaiFaces;
   };
 
   displayFaceBox = (box) => {
@@ -70,7 +75,7 @@ class App extends Component {
     this.setState({ imageUrl: this.state.input });
     // Reset the box so the old one doesn't display on the new image before
     // clarifai returns the bounding_box
-    this.setState({ box: {} });
+    this.setState({ box: [] });
 
     // HEADS UP! Sometimes the Clarifai Models can be down or not working as they are constantly getting updated.
     // A good way to check if the model you are using is up, is to check them on the clarifai website. For example,
